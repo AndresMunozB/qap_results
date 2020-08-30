@@ -11,36 +11,37 @@ def load_json(name_json):
         data = json.load(file)
     return data
 
-def get_times_and_best(json_filename, category, iterations, format_file):
+def get_times_and_best(json_filename, category, iterations):
     times = {'Tiempo':[], 'Parámetro': [], 'Prueba': []}
     bests_objectives = {'Valor objetivo': [], 'Parámetro': [], 'Prueba': []}
-    if format_file == 0:
-        for i in range(1,iterations+1):
-            json_instance = load_json(f"{json_filename}_{i}")
-            times['Tiempo'].append(json_instance["elapsed_time"])
-            times['Parámetro'].append(category)
-            times['Prueba'].append(i)
-            bests_objectives['Valor objetivo'].append(int(json_instance["best_objetive"]))
-            bests_objectives['Parámetro'].append(category)
-            bests_objectives['Prueba'].append(i)
+    for i in range(1,iterations+1):
+        json_instance = load_json(f"{json_filename}_{i}")
+        times['Tiempo'].append(json_instance["elapsed_time"])
+        times['Parámetro'].append(category)
+        times['Prueba'].append(i)
+        bests_objectives['Valor objetivo'].append(int(json_instance["best_objetive"]))
+        bests_objectives['Parámetro'].append(category)
+        bests_objectives['Prueba'].append(i)
 
-        times = pd.DataFrame.from_dict(times)
-        bests_objectives = pd.DataFrame.from_dict(bests_objectives)
-    else:
-        for i in range(1,iterations+1):
-            numero = str(i).zfill(3)
-            json_instance = load_json(f"{json_filename}_{numero}")
-            times['Tiempo'].append(json_instance["elapsed_time"])
-            times['Parámetro'].append(category)
-            times['Prueba'].append(i)
-            bests_objectives['Valor objetivo'].append(int(json_instance["best_objetive"]))
-            bests_objectives['Parámetro'].append(category)
-            bests_objectives['Prueba'].append(i)
+    times = pd.DataFrame.from_dict(times)
+    bests_objectives = pd.DataFrame.from_dict(bests_objectives)
+    return times, bests_objectives
 
-        times = pd.DataFrame.from_dict(times)
-        bests_objectives = pd.DataFrame.from_dict(bests_objectives)
-         
+def get_times_and_best_2(json_filename, category, iterations):
+    times = {'Tiempo':[], 'Parámetro': [], 'Prueba': []}
+    bests_objectives = {'Valor objetivo': [], 'Parámetro': [], 'Prueba': []}
+    for i in range(1,iterations+1):
+        numero = str(i).zfill(3)
+        json_instance = load_json(f"{json_filename}_{numero}")
+        times['Tiempo'].append(json_instance["elapsed_time"])
+        times['Parámetro'].append(category)
+        times['Prueba'].append(i)
+        bests_objectives['Valor objetivo'].append(int(json_instance["best_objective"]))
+        bests_objectives['Parámetro'].append(category)
+        bests_objectives['Prueba'].append(i)
 
+    times = pd.DataFrame.from_dict(times)
+    bests_objectives = pd.DataFrame.from_dict(bests_objectives)
     return times, bests_objectives
 
 def unify_data(parameter_list, filename_list, iterations, format_file):
@@ -48,14 +49,20 @@ def unify_data(parameter_list, filename_list, iterations, format_file):
     dataframe_times = pd.DataFrame(columns = ['Tiempo', 'Parámetro', 'Prueba'])
     dataframe_bests = pd.DataFrame(columns = ['Valor objetivo', 'Parámetro', 'Prueba'])
 
+    if format_file==0:
 
-    for i in range(parameters):
-        times, bests = get_times_and_best(filename_list[i], parameter_list[i], iterations, format_file)
-        dataframe_times = dataframe_times.append(times, ignore_index=True)
-        dataframe_bests = dataframe_bests.append(bests, ignore_index=True)
-    
+        for i in range(parameters):
+            times, bests = get_times_and_best(filename_list[i], parameter_list[i], iterations)
+            dataframe_times = dataframe_times.append(times, ignore_index=True)
+            dataframe_bests = dataframe_bests.append(bests, ignore_index=True)
+        
+        
+    else:
+        for i in range(parameters):
+            times, bests = get_times_and_best_2(filename_list[i], parameter_list[i], iterations)
+            dataframe_times = dataframe_times.append(times, ignore_index=True)
+            dataframe_bests = dataframe_bests.append(bests, ignore_index=True)
     return dataframe_times, dataframe_bests
-
 
 def graph_boxplot(data, filename, title, evaluation_criteria):
     ax = sns.boxplot(x='Parámetro', y= evaluation_criteria, data= data)
@@ -88,7 +95,7 @@ temperature = ["base", "temperature_x10", "temperature_x0.5"]
 temperature_filename_chr12a = ["result_sa/chr12a_base_SA", "result_sa/chr12a_temperature_10_SA", "result_sa/chr12a_temperature_05_SA"]
 
 temperature_times, temperature_bests = unify_data(temperature, temperature_filename_chr12a, 30, 0)
-
+df = temperature_times.groupby('Parámetro').describe()
 #####      PLOT TIME      #######
 
 graph_scatterplot(temperature_times, "plots_sa/chr12a_temperature_time_boxplot.jpg", "Instancia: chr12a", 'Tiempo')
@@ -217,3 +224,14 @@ graph_scatterplot(iteration_times, "plots_sa/kra32_iteration_time_boxplot.jpg", 
 ##### PLOT OBJECTIVE VALUE #####
 
 graph_boxplot(iteration_bests, "plots_sa/kra32_iteration_obj_value_boxplot.jpg", "Instancia: kra32", 'Valor objetivo')
+
+
+
+""""""""""""""""""""" BESTS COMPARATIONS """""""""""""""""""""
+
+###### INSTANCIA 1 #######
+algorithm = ["SA", "GA"]
+filename_bests_chr12a = ["result_best/chr12a_best_sa","result_best/chr12a_best_ga"]
+times, bests = unify_data(algorithm, filename_bests_chr12a, 30, 1)
+graph_scatterplot(times, "plots_best/chr12a_best_time_boxplot.jpg", "Instancia: chr12a", 'Tiempo')
+graph_boxplot(bests, "plots_best/chr12a_best_obj_value_boxplot.jpg", "Instancia: chr12a", 'Valor objetivo')
