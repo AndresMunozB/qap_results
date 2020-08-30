@@ -11,27 +11,51 @@ def load_json(name_json):
         data = json.load(file)
     return data
 
-def get_times_and_best(json_filename, category, iterations):
+def get_times_and_best(json_filename, category, iterations, format_file):
     times = {'Tiempo':[], 'Parámetro': [], 'Prueba': []}
     bests_objectives = {'Valor objetivo': [], 'Parámetro': [], 'Prueba': []}
-    for i in range(1,iterations+1):
-        json_instance = load_json(f"{json_filename}_{i}")
-        times['Tiempo'].append(json_instance["elapsed_time"])
-        times['Parámetro'].append(category)
-        times['Prueba'].append(i)
-        bests_objectives['Valor objetivo'].append(int(json_instance["best_objetive"]))
-        bests_objectives['Parámetro'].append(category)
-        bests_objectives['Prueba'].append(i)
+    if format_file == 0:
+        for i in range(1,iterations+1):
+            json_instance = load_json(f"{json_filename}_{i}")
+            times['Tiempo'].append(json_instance["elapsed_time"])
+            times['Parámetro'].append(category)
+            times['Prueba'].append(i)
+            bests_objectives['Valor objetivo'].append(int(json_instance["best_objetive"]))
+            bests_objectives['Parámetro'].append(category)
+            bests_objectives['Prueba'].append(i)
 
-    times = pd.DataFrame.from_dict(times)
-    bests_objectives = pd.DataFrame.from_dict(bests_objectives)
+        times = pd.DataFrame.from_dict(times)
+        bests_objectives = pd.DataFrame.from_dict(bests_objectives)
+    else:
+        for i in range(1,iterations+1):
+            numero = str(i).zfill(3)
+            json_instance = load_json(f"{json_filename}_{numero}")
+            times['Tiempo'].append(json_instance["elapsed_time"])
+            times['Parámetro'].append(category)
+            times['Prueba'].append(i)
+            bests_objectives['Valor objetivo'].append(int(json_instance["best_objetive"]))
+            bests_objectives['Parámetro'].append(category)
+            bests_objectives['Prueba'].append(i)
+
+        times = pd.DataFrame.from_dict(times)
+        bests_objectives = pd.DataFrame.from_dict(bests_objectives)
+         
+
     return times, bests_objectives
 
-def make_dataframe(dict_1, dict_2, dict_3):
-    data_1 = pd.DataFrame.from_dict(dict_1)
-    data_2 = pd.DataFrame.from_dict(dict_2)
-    data_3 = pd.DataFrame.from_dict(dict_3)
-    return pd.concat([data_1, data_2, data_3])
+def unify_data(parameter_list, filename_list, iterations, format_file):
+    parameters = len(parameter_list)
+    dataframe_times = pd.DataFrame(columns = ['Tiempo', 'Parámetro', 'Prueba'])
+    dataframe_bests = pd.DataFrame(columns = ['Valor objetivo', 'Parámetro', 'Prueba'])
+
+
+    for i in range(parameters):
+        times, bests = get_times_and_best(filename_list[i], parameter_list[i], iterations, format_file)
+        dataframe_times = dataframe_times.append(times, ignore_index=True)
+        dataframe_bests = dataframe_bests.append(bests, ignore_index=True)
+    
+    return dataframe_times, dataframe_bests
+
 
 def graph_boxplot(data, filename, title, evaluation_criteria):
     ax = sns.boxplot(x='Parámetro', y= evaluation_criteria, data= data)
@@ -52,124 +76,117 @@ def graph_scatterplot(data, filename, title, evaluation_criteria):
                     format='jpeg')
     
     plt.clf()
-############## TEMPERATURA ###########################
 
-#### INSTANCIA 1 ######
+
+
+################################ TEMPERATURA ####################################
+
 temperature = ["base", "temperature_x10", "temperature_x0.5"]
-times_base, bests_base = get_times_and_best("result_sa/chr12a_base_SA", temperature[0], 30)
-times_temperature_10, best_temperature_10_obj = get_times_and_best("result_sa/chr12a_temperature_10_SA", temperature[1], 30)
-times_temperature_05, best_temperature_05_obj = get_times_and_best("result_sa/chr12a_temperature_05_SA", temperature[2], 30)
+###################### INSTANCIA 1 #############################
 
-times_temperature = make_dataframe(times_base, times_temperature_10, times_temperature_05)
-bests_temperature = make_dataframe(bests_base, best_temperature_10_obj, best_temperature_05_obj)
+temperature_filename_chr12a = ["result_sa/chr12a_base_SA", "result_sa/chr12a_temperature_10_SA", "result_sa/chr12a_temperature_05_SA"]
+
+temperature_times, temperature_bests = unify_data(temperature, temperature_filename_chr12a, 30, 0)
+
+#####      PLOT TIME      #######
+
+graph_scatterplot(temperature_times, "plots_sa/chr12a_temperature_time_boxplot.jpg", "Instancia: chr12a", 'Tiempo')
+
+##### PLOT OBJECTIVE VALUE ######
+graph_boxplot(temperature_bests, "plots_sa/chr12a_temperature_obj_value_boxplot.jpg", "Instancia: chr12a", 'Valor objetivo')
+
+
+######################## INSTANCIA 2 ############################
+
+temperature_filename_esc64a = ["result_sa/esc64a_base_SA", "result_sa/esc64a_temperature_10_SA", "result_sa/esc64a_temperature_05_SA"]
+temperature_times, temperature_bests = unify_data(temperature, temperature_filename_esc64a, 30, 0)
+
+
+#####      PLOT TIME      #######
+
+graph_scatterplot(temperature_times, "plots_sa/esc64a_temperature_time_boxplot.jpg", "Instancia: esc64a", 'Tiempo')
+
+##### PLOT OBJECTIVE VALUE ######
+graph_boxplot(temperature_bests, "plots_sa/esc64a_temperature_obj_value_boxplot.jpg", "Instancia: esc64a", 'Valor objetivo')
+
+
+######################## INSTANCIA 3 ############################
+
+temperature_filename_kra32 = ["result_sa/kra32_base_SA", "result_sa/kra32_temperature_10_SA", "result_sa/kra32_temperature_05_SA"]
+temperature_times, temperature_bests = unify_data(temperature, temperature_filename_kra32, 30, 0)
 
 
 ##### PLOT TIME #######
 
-graph_scatterplot(times_temperature, "chr12a_temperature_time_boxplot.jpg", "Instancia: chr12a", 'Tiempo')
+graph_scatterplot(temperature_times, "plots_sa/kra32_temperature_time_boxplot.jpg", "Instancia: kra32", 'Tiempo')
 
 ##### PLOT OBJECTIVE VALUE ######
-graph_boxplot(bests_temperature, "chr12a_temperature_obj_value_boxplot.jpg", "Instancia: chr12a", 'Valor objetivo')
+graph_boxplot(temperature_bests, "plots_sa/kra32_temperature_obj_value_boxplot.jpg", "Instancia: kra32", 'Valor objetivo')
 
-#### INSTANCIA 2 #######
-
-temperature = ["base", "temperature_x10", "temperature_x0.5"]
-times_base, bests_base = get_times_and_best("result_sa/esc64a_base_SA", temperature[0], 30)
-times_temperature_10, best_temperature_10_obj = get_times_and_best("result_sa/esc64a_temperature_10_SA", temperature[1], 30)
-times_temperature_05, best_temperature_05_obj = get_times_and_best("result_sa/esc64a_temperature_05_SA", temperature[2], 30)
-
-times_temperature = make_dataframe(times_base, times_temperature_10, times_temperature_05)
-bests_temperature = make_dataframe(bests_base, best_temperature_10_obj, best_temperature_05_obj)
-
-
-##### PLOT TIME #######
-
-graph_scatterplot(times_temperature, "esc64a_temperature_time_boxplot.jpg", "Instancia: esc64a", 'Tiempo')
-
-##### PLOT OBJECTIVE VALUE ######
-graph_boxplot(bests_temperature, "esc64a_temperature_obj_value_boxplot.jpg", "Instancia: esc64a", 'Valor objetivo')
-
-#### INSTANCIA 3 #######
-
-temperature = ["base", "temperature_x10", "temperature_x0.5"]
-times_base, bests_base = get_times_and_best("result_sa/kra32_base_SA", temperature[0], 30)
-times_temperature_10, best_temperature_10_obj = get_times_and_best("result_sa/kra32_temperature_10_SA", temperature[1], 30)
-times_temperature_05, best_temperature_05_obj = get_times_and_best("result_sa/kra32_temperature_05_SA", temperature[2], 30)
-
-times_temperature = make_dataframe(times_base, times_temperature_10, times_temperature_05)
-bests_temperature = make_dataframe(bests_base, best_temperature_10_obj, best_temperature_05_obj)
-
-
-##### PLOT TIME #######
-
-graph_scatterplot(times_temperature, "kra32_temperature_time_boxplot.jpg", "Instancia: kra32", 'Tiempo')
-
-##### PLOT OBJECTIVE VALUE ######
-graph_boxplot(bests_temperature, "kra32_temperature_obj_value_boxplot.jpg", "Instancia: kra32", 'Valor objetivo')
-
-################ ALPHA ##################
+######################################## ALPHA #######################################
 
 #### INSTANCIA 1 #######
 geometric = ["alpha_0.85(base)", "alpha_0.75", "alpha_0.99"]
-times_base_geo, bests_base_geo = get_times_and_best("result_sa/chr12a_base_SA", geometric[0], 30)
+geometric_filename_chr12a = ["result_sa/chr12a_base_SA", "result_sa/chr12a_geometric_75_SA", "result_sa/chr12a_geometric_99_SA"]
 
-times_geometric_75, best_geometric_75_obj = get_times_and_best("result_sa/chr12a_geometric_75_SA", geometric[1], 30)
-times_geometric_99, best_geometric_99_obj = get_times_and_best("result_sa/chr12a_geometric_99_SA", geometric[2], 30)
-
-times_geometric = make_dataframe(times_base_geo, times_geometric_75, times_geometric_99)
-bests_geometric = make_dataframe(bests_base_geo, best_geometric_75_obj, best_geometric_99_obj)
+geometric_times, geometric_bests = unify_data(geometric, geometric_filename_chr12a, 30, 0)
 
 
 ##### PLOT TIME #######
 
-graph_scatterplot(times_geometric, "chr12a_geometric_time_boxplot.jpg", "Instancia: chr12a", 'Tiempo')
+graph_scatterplot(geometric_times, "plots_sa/chr12a_geometric_time_boxplot.jpg", "Instancia: chr12a", 'Tiempo')
 
 ##### PLOT OBJECTIVE VALUE #####
 
-graph_boxplot(bests_geometric, "chr12a_geometric_obj_value_boxplot.jpg", "Instancia: chr12a", 'Valor objetivo')
+graph_boxplot(geometric_bests, "plots_sa/chr12a_geometric_obj_value_boxplot.jpg", "Instancia: chr12a", 'Valor objetivo')
+
 
 #### INSTANCIA 2 #######
-geometric = ["alpha_0.85(base)", "alpha_0.75", "alpha_0.99"]
-times_base_geo, bests_base_geo = get_times_and_best("result_sa/esc64a_base_SA", geometric[0], 30)
 
-times_geometric_75, best_geometric_75_obj = get_times_and_best("result_sa/esc64a_geometric_75_SA", geometric[1], 30)
-times_geometric_99, best_geometric_99_obj = get_times_and_best("result_sa/esc64a_geometric_99_SA", geometric[2], 30)
+geometric_filename_esc64a = ["result_sa/esc64a_base_SA", "result_sa/esc64a_geometric_75_SA", "result_sa/esc64a_geometric_99_SA"]
 
-times_geometric = make_dataframe(times_base_geo, times_geometric_75, times_geometric_99)
-bests_geometric = make_dataframe(bests_base_geo, best_geometric_75_obj, best_geometric_99_obj)
+geometric_times, geometric_bests = unify_data(geometric, geometric_filename_esc64a, 30, 0)
 
 
 ##### PLOT TIME #######
 
-graph_scatterplot(times_geometric, "esc64a_geometric_time_boxplot.jpg", "Instancia: esc64a", 'Tiempo')
+graph_scatterplot(geometric_times, "plots_sa/esc64a_geometric_time_boxplot.jpg", "Instancia: esc64a", 'Tiempo')
 
 ##### PLOT OBJECTIVE VALUE #####
 
-graph_boxplot(bests_geometric, "esc64a_geometric_obj_value_boxplot.jpg", "Instancia: esc64a", 'Valor objetivo')
-
+graph_boxplot(geometric_bests, "plots_sa/esc64a_geometric_obj_value_boxplot.jpg", "Instancia: esc64a", 'Valor objetivo')
 
 #### INSTANCIA 3 #######
-geometric = ["alpha_0.85(base)", "alpha_0.75", "alpha_0.99"]
-times_base_geo, bests_base_geo = get_times_and_best("result_sa/kra32_base_SA", geometric[0], 30)
+geometric_filename_kra32 = ["result_sa/kra32_base_SA", "result_sa/kra32_geometric_75_SA", "result_sa/kra32_geometric_99_SA"]
 
-times_geometric_75, best_geometric_75_obj = get_times_and_best("result_sa/kra32_geometric_75_SA", geometric[1], 30)
-times_geometric_99, best_geometric_99_obj = get_times_and_best("result_sa/kra32_geometric_99_SA", geometric[2], 30)
-
-times_geometric = make_dataframe(times_base_geo, times_geometric_75, times_geometric_99)
-bests_geometric = make_dataframe(bests_base_geo, best_geometric_75_obj, best_geometric_99_obj)
+geometric_times, geometric_bests = unify_data(geometric, geometric_filename_kra32, 30, 0)
 
 
 ##### PLOT TIME #######
 
-graph_scatterplot(times_geometric, "kra32_geometric_time_boxplot.jpg", "Instancia: kra32", 'Tiempo')
+graph_scatterplot(geometric_times, "plots_sa/kra32_geometric_time_boxplot.jpg", "Instancia: kra32", 'Tiempo')
 
 ##### PLOT OBJECTIVE VALUE #####
 
-graph_boxplot(bests_geometric, "kra32_geometric_obj_value_boxplot.jpg", "Instancia: kra32", 'Valor objetivo')
+graph_boxplot(geometric_bests, "plots_sa/kra32_geometric_obj_value_boxplot.jpg", "Instancia: kra32", 'Valor objetivo')
 
-############## ITERATION ######################
+#################### ITERATION #########################
+
+############ INSTANCIA 1 ##################
+iteration = ["25 iter.(base)", "50 iter.", "10 iter."]
+iteration_filename_chr12a = ["result_sa/chr12a_base_SA", "result_sa/chr12a_iterations_50_SA", "result_sa/chr12a_iterations_10_SA"]
+
+iteration_times, iteration_bests = unify_data(iteration, iteration_filename_chr12a, 30, 0)
 
 
+##### PLOT TIME #######
+
+graph_scatterplot(iteration_times, "plots_sa/chr12a_iteration_time_boxplot.jpg", "Instancia: chr12a", 'Tiempo')
+
+##### PLOT OBJECTIVE VALUE #####
+
+graph_boxplot(iteration_bests, "plots_sa/chr12a_iteration_obj_value_boxplot.jpg", "Instancia: chr12a", 'Valor objetivo')
+"""
 ##### INSTANCIA 1 ########
 
 iteration = ["25 iter.(base)", "50 iter.", "10 iter."]
@@ -230,4 +247,4 @@ graph_scatterplot(times_iterations, "kra32_iterations_time_boxplot.jpg", "Instan
 
 ##### PLOT OBJECTIVE VALUE #####
 
-graph_boxplot(bests_iterations, "kra32_iterations_obj_value_boxplot.jpg", "Instancia: kra32", 'Valor objetivo')
+graph_boxplot(bests_iterations, "kra32_iterations_obj_value_boxplot.jpg", "Instancia: kra32", 'Valor objetivo')"""
