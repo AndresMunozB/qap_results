@@ -71,6 +71,7 @@ def graph_scatterplot(data, filename, title, evaluation_criteria):
                      data=data)
     ax.set_title(title)
     ax.legend(loc='right', bbox_to_anchor=(1.01, 0.25), ncol=1)
+    ax.set(ylabel= "Tiempo[s]")
     #plt.figure(figsize=(10,6))
     ax.figure.savefig(filename,
                     format='jpeg')
@@ -186,65 +187,33 @@ graph_scatterplot(iteration_times, "plots_sa/chr12a_iteration_time_boxplot.jpg",
 ##### PLOT OBJECTIVE VALUE #####
 
 graph_boxplot(iteration_bests, "plots_sa/chr12a_iteration_obj_value_boxplot.jpg", "Instancia: chr12a", 'Valor objetivo')
-"""
-##### INSTANCIA 1 ########
 
+############ INSTANCIA 2 ##################
 iteration = ["25 iter.(base)", "50 iter.", "10 iter."]
-times_base_it, bests_base_it = get_times_and_best("result_sa/chr12a_base_SA", iteration[0], 30)
+iteration_filename_esc64a = ["result_sa/esc64a_base_SA", "result_sa/esc64a_iterations_50_SA", "result_sa/esc64a_iterations_10_SA"]
 
-times_iterations_50, best_iterations_50_obj = get_times_and_best("result_sa/chr12a_iterations_50_SA", iteration[1], 30)
-times_iterations_10, best_iterations_10_obj = get_times_and_best("result_sa/chr12a_iterations_10_SA", iteration[2], 30)
-
-times_iterations = make_dataframe(times_base_it, times_iterations_50, times_iterations_10)
-bests_iterations = make_dataframe(bests_base_it, best_iterations_50_obj, best_iterations_10_obj)
+iteration_times, iteration_bests = unify_data(iteration, iteration_filename_esc64a, 30, 0)
 
 
 ##### PLOT TIME #######
 
-graph_scatterplot(times_iterations, "chr12a_iterations_time_boxplot.jpg", "Instancia: chr12a", 'Tiempo')
+graph_scatterplot(iteration_times, "plots_sa/esc64a_iteration_time_boxplot.jpg", "Instancia: esc64a", 'Tiempo')
 
 ##### PLOT OBJECTIVE VALUE #####
 
-graph_boxplot(bests_iterations, "chr12a_iterations_obj_value_boxplot.jpg", "Instancia: chr12a", 'Valor objetivo')
+graph_boxplot(iteration_bests, "plots_sa/esc64a_iteration_obj_value_boxplot.jpg", "Instancia: esc64a", 'Valor objetivo')
 
-
-##### INSTANCIA 2 ########
-
+############ INSTANCIA 3 ##################
 iteration = ["25 iter.(base)", "50 iter.", "10 iter."]
-times_base_it, bests_base_it = get_times_and_best("result_sa/esc64a_base_SA", iteration[0], 30)
+iteration_filename_kra32 = ["result_sa/kra32_base_SA", "result_sa/kra32_iterations_50_SA", "result_sa/kra32_iterations_10_SA"]
 
-times_iterations_50, best_iterations_50_obj = get_times_and_best("result_sa/esc64a_iterations_50_SA", iteration[1], 30)
-times_iterations_10, best_iterations_10_obj = get_times_and_best("result_sa/esc64a_iterations_10_SA", iteration[2], 30)
-
-times_iterations = make_dataframe(times_base_it, times_iterations_50, times_iterations_10)
-bests_iterations = make_dataframe(bests_base_it, best_iterations_50_obj, best_iterations_10_obj)
+iteration_times, iteration_bests = unify_data(iteration, iteration_filename_kra32, 30, 0)
 
 
 ##### PLOT TIME #######
 
-graph_scatterplot(times_iterations, "esc64a_iterations_time_boxplot.jpg", "Instancia: esc64a", 'Tiempo')
+graph_scatterplot(iteration_times, "plots_sa/kra32_iteration_time_boxplot.jpg", "Instancia: kra32", 'Tiempo')
 
 ##### PLOT OBJECTIVE VALUE #####
 
-graph_boxplot(bests_iterations, "esc64a_iterations_obj_value_boxplot.jpg", "Instancia: esc64a", 'Valor objetivo')
-
-
-##### INSTANCIA 3 ########
-
-iteration = ["25 iter.(base)", "50 iter.", "10 iter."]
-times_base_it, bests_base_it = get_times_and_best("result_sa/kra32_base_SA", iteration[0], 30)
-
-times_iterations_50, best_iterations_50_obj = get_times_and_best("result_sa/kra32_iterations_50_SA", iteration[1], 30)
-times_iterations_10, best_iterations_10_obj = get_times_and_best("result_sa/kra32_iterations_10_SA", iteration[2], 30)
-
-times_iterations = make_dataframe(times_base_it, times_iterations_50, times_iterations_10)
-bests_iterations = make_dataframe(bests_base_it, best_iterations_50_obj, best_iterations_10_obj)
-
-
-##### PLOT TIME #######
-
-graph_scatterplot(times_iterations, "kra32_iterations_time_boxplot.jpg", "Instancia: kra32", 'Tiempo')
-
-##### PLOT OBJECTIVE VALUE #####
-
-graph_boxplot(bests_iterations, "kra32_iterations_obj_value_boxplot.jpg", "Instancia: kra32", 'Valor objetivo')"""
+graph_boxplot(iteration_bests, "plots_sa/kra32_iteration_obj_value_boxplot.jpg", "Instancia: kra32", 'Valor objetivo')
