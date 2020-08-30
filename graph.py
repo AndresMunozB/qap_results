@@ -71,9 +71,45 @@ graph_scatterplot(times_temperature, "chr12a_temperature_time_boxplot.jpg", "Ins
 ##### PLOT OBJECTIVE VALUE ######
 graph_boxplot(bests_temperature, "chr12a_temperature_obj_value_boxplot.jpg", "Instancia: chr12a", 'Valor objetivo')
 
+#### INSTANCIA 2 #######
+
+temperature = ["base", "temperature_x10", "temperature_x0.5"]
+times_base, bests_base = get_times_and_best("result_sa/esc64a_base_SA", temperature[0], 30)
+times_temperature_10, best_temperature_10_obj = get_times_and_best("result_sa/esc64a_temperature_10_SA", temperature[1], 30)
+times_temperature_05, best_temperature_05_obj = get_times_and_best("result_sa/esc64a_temperature_05_SA", temperature[2], 30)
+
+times_temperature = make_dataframe(times_base, times_temperature_10, times_temperature_05)
+bests_temperature = make_dataframe(bests_base, best_temperature_10_obj, best_temperature_05_obj)
+
+
+##### PLOT TIME #######
+
+graph_scatterplot(times_temperature, "esc64a_temperature_time_boxplot.jpg", "Instancia: esc64a", 'Tiempo')
+
+##### PLOT OBJECTIVE VALUE ######
+graph_boxplot(bests_temperature, "esc64a_temperature_obj_value_boxplot.jpg", "Instancia: esc64a", 'Valor objetivo')
+
+#### INSTANCIA 3 #######
+
+temperature = ["base", "temperature_x10", "temperature_x0.5"]
+times_base, bests_base = get_times_and_best("result_sa/kra32_base_SA", temperature[0], 30)
+times_temperature_10, best_temperature_10_obj = get_times_and_best("result_sa/kra32_temperature_10_SA", temperature[1], 30)
+times_temperature_05, best_temperature_05_obj = get_times_and_best("result_sa/kra32_temperature_05_SA", temperature[2], 30)
+
+times_temperature = make_dataframe(times_base, times_temperature_10, times_temperature_05)
+bests_temperature = make_dataframe(bests_base, best_temperature_10_obj, best_temperature_05_obj)
+
+
+##### PLOT TIME #######
+
+graph_scatterplot(times_temperature, "kra32_temperature_time_boxplot.jpg", "Instancia: kra32", 'Tiempo')
+
+##### PLOT OBJECTIVE VALUE ######
+graph_boxplot(bests_temperature, "kra32_temperature_obj_value_boxplot.jpg", "Instancia: kra32", 'Valor objetivo')
 
 ################ ALPHA ##################
 
+#### INSTANCIA 1 #######
 geometric = ["alpha_0.85(base)", "alpha_0.75", "alpha_0.99"]
 times_base_geo, bests_base_geo = get_times_and_best("result_sa/chr12a_base_SA", geometric[0], 30)
 
@@ -92,8 +128,49 @@ graph_scatterplot(times_geometric, "chr12a_geometric_time_boxplot.jpg", "Instanc
 
 graph_boxplot(bests_geometric, "chr12a_geometric_obj_value_boxplot.jpg", "Instancia: chr12a", 'Valor objetivo')
 
+#### INSTANCIA 2 #######
+geometric = ["alpha_0.85(base)", "alpha_0.75", "alpha_0.99"]
+times_base_geo, bests_base_geo = get_times_and_best("result_sa/esc64a_base_SA", geometric[0], 30)
+
+times_geometric_75, best_geometric_75_obj = get_times_and_best("result_sa/esc64a_geometric_75_SA", geometric[1], 30)
+times_geometric_99, best_geometric_99_obj = get_times_and_best("result_sa/esc64a_geometric_99_SA", geometric[2], 30)
+
+times_geometric = make_dataframe(times_base_geo, times_geometric_75, times_geometric_99)
+bests_geometric = make_dataframe(bests_base_geo, best_geometric_75_obj, best_geometric_99_obj)
+
+
+##### PLOT TIME #######
+
+graph_scatterplot(times_geometric, "esc64a_geometric_time_boxplot.jpg", "Instancia: esc64a", 'Tiempo')
+
+##### PLOT OBJECTIVE VALUE #####
+
+graph_boxplot(bests_geometric, "esc64a_geometric_obj_value_boxplot.jpg", "Instancia: esc64a", 'Valor objetivo')
+
+
+#### INSTANCIA 3 #######
+geometric = ["alpha_0.85(base)", "alpha_0.75", "alpha_0.99"]
+times_base_geo, bests_base_geo = get_times_and_best("result_sa/kra32_base_SA", geometric[0], 30)
+
+times_geometric_75, best_geometric_75_obj = get_times_and_best("result_sa/kra32_geometric_75_SA", geometric[1], 30)
+times_geometric_99, best_geometric_99_obj = get_times_and_best("result_sa/kra32_geometric_99_SA", geometric[2], 30)
+
+times_geometric = make_dataframe(times_base_geo, times_geometric_75, times_geometric_99)
+bests_geometric = make_dataframe(bests_base_geo, best_geometric_75_obj, best_geometric_99_obj)
+
+
+##### PLOT TIME #######
+
+graph_scatterplot(times_geometric, "kra32_geometric_time_boxplot.jpg", "Instancia: kra32", 'Tiempo')
+
+##### PLOT OBJECTIVE VALUE #####
+
+graph_boxplot(bests_geometric, "kra32_geometric_obj_value_boxplot.jpg", "Instancia: kra32", 'Valor objetivo')
 
 ############## ITERATION ######################
+
+
+##### INSTANCIA 1 ########
 
 iteration = ["25 iter.(base)", "50 iter.", "10 iter."]
 times_base_it, bests_base_it = get_times_and_best("result_sa/chr12a_base_SA", iteration[0], 30)
@@ -112,3 +189,45 @@ graph_scatterplot(times_iterations, "chr12a_iterations_time_boxplot.jpg", "Insta
 ##### PLOT OBJECTIVE VALUE #####
 
 graph_boxplot(bests_iterations, "chr12a_iterations_obj_value_boxplot.jpg", "Instancia: chr12a", 'Valor objetivo')
+
+
+##### INSTANCIA 2 ########
+
+iteration = ["25 iter.(base)", "50 iter.", "10 iter."]
+times_base_it, bests_base_it = get_times_and_best("result_sa/esc64a_base_SA", iteration[0], 30)
+
+times_iterations_50, best_iterations_50_obj = get_times_and_best("result_sa/esc64a_iterations_50_SA", iteration[1], 30)
+times_iterations_10, best_iterations_10_obj = get_times_and_best("result_sa/esc64a_iterations_10_SA", iteration[2], 30)
+
+times_iterations = make_dataframe(times_base_it, times_iterations_50, times_iterations_10)
+bests_iterations = make_dataframe(bests_base_it, best_iterations_50_obj, best_iterations_10_obj)
+
+
+##### PLOT TIME #######
+
+graph_scatterplot(times_iterations, "esc64a_iterations_time_boxplot.jpg", "Instancia: esc64a", 'Tiempo')
+
+##### PLOT OBJECTIVE VALUE #####
+
+graph_boxplot(bests_iterations, "esc64a_iterations_obj_value_boxplot.jpg", "Instancia: esc64a", 'Valor objetivo')
+
+
+##### INSTANCIA 3 ########
+
+iteration = ["25 iter.(base)", "50 iter.", "10 iter."]
+times_base_it, bests_base_it = get_times_and_best("result_sa/kra32_base_SA", iteration[0], 30)
+
+times_iterations_50, best_iterations_50_obj = get_times_and_best("result_sa/kra32_iterations_50_SA", iteration[1], 30)
+times_iterations_10, best_iterations_10_obj = get_times_and_best("result_sa/kra32_iterations_10_SA", iteration[2], 30)
+
+times_iterations = make_dataframe(times_base_it, times_iterations_50, times_iterations_10)
+bests_iterations = make_dataframe(bests_base_it, best_iterations_50_obj, best_iterations_10_obj)
+
+
+##### PLOT TIME #######
+
+graph_scatterplot(times_iterations, "kra32_iterations_time_boxplot.jpg", "Instancia: kra32", 'Tiempo')
+
+##### PLOT OBJECTIVE VALUE #####
+
+graph_boxplot(bests_iterations, "kra32_iterations_obj_value_boxplot.jpg", "Instancia: kra32", 'Valor objetivo')
