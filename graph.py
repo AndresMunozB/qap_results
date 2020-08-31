@@ -65,7 +65,7 @@ def unify_data(parameter_list, filename_list, iterations, format_file):
     return dataframe_times, dataframe_bests
 
 def graph_boxplot(data, filename, title, evaluation_criteria):
-    ax = sns.boxplot(x='Parámetro', y= evaluation_criteria, data= data)
+    ax = sns.boxplot(x='Parámetro', y= evaluation_criteria, data= data, palette = "BuGn_r")
     ax = sns.swarmplot(x="Parámetro", y= evaluation_criteria, data= data, color=".25")
     ax.set_title(title)
     ax.figure.savefig(filename,
@@ -230,11 +230,11 @@ graph_boxplot(iteration_bests, "plots_sa/kra32_iteration_obj_value_boxplot.jpg",
 """"""""""""""""""""" BESTS COMPARATIONS """""""""""""""""""""
 
 ###### INSTANCIA 1 #######
-#algorithm = ["SA", "GA"]
-#filename_bests_chr12a = ["result_best/chr12a_best_sa","result_best/chr12a_best_ga"]
-#times, bests = unify_data(algorithm, filename_bests_chr12a, 30, 1)
-#graph_scatterplot(times, "plots_best/chr12a_best_time_boxplot.jpg", "Instancia: chr12a", 'Tiempo')
-#graph_boxplot(bests, "plots_best/chr12a_best_obj_value_boxplot.jpg", "Instancia: chr12a", 'Valor objetivo')
+algorithm = ["SA", "GA"]
+filename_bests_chr12a = ["result_best/chr12a_best_sa","result_best/chr12a_best_ga"]
+times, bests = unify_data(algorithm, filename_bests_chr12a, 30, 1)
+graph_scatterplot(times, "plots_best/chr12a_best_time_boxplot.jpg", "Tiempos obtenidos por ambas metaheuristicas Instancia: chr12a", 'Tiempo')
+graph_boxplot(bests, "plots_best/chr12a_best_obj_value_boxplot.jpg", "Valores objetivos obtenidos por ambas metaheuristicas Instancia: chr12a", 'Valor objetivo')
 
 """"""""""""""""""""""" GA RESULTS """""""""""""""""""""""""""
 
