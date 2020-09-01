@@ -185,6 +185,8 @@ iteration = ["25 iter.(base)", "50 iter.", "10 iter."]
 iteration_filename_chr12a = ["result_sa/chr12a_base_SA", "result_sa/chr12a_iterations_50_SA", "result_sa/chr12a_iterations_10_SA"]
 
 iteration_times, iteration_bests = unify_data(iteration, iteration_filename_chr12a, 30, 0)
+df = iteration_times.groupby('Parámetro').describe()
+#print(df)
 
 
 ##### PLOT TIME #######
@@ -237,25 +239,28 @@ graph_scatterplot(times, "plots_best/chr12a_best_time_boxplot.jpg", "Tiempos obt
 graph_boxplot(bests, "plots_best/chr12a_best_obj_value_boxplot.jpg", "Valores objetivos obtenidos por ambas metaheuristicas Instancia: chr12a", 'Valor objetivo')
 
 a = times.groupby('Parámetro').describe()
-#print(a)
+print("*************CHR12A*******************")
+print(a)
 b = bests.groupby('Parámetro').describe()
-#print(b)
+print(b)
 
-filename_bests_chr12a = ["result_best/esc64a_best_sa","result_best/esc64a_best_ga"]
+filename_bests_chr12a = ["result_best/esc64a_best_sa","result_new/result/esc64a_best_ga"]
 times, bests = unify_data(algorithm, filename_bests_chr12a, 30, 1)
-graph_scatterplot(times, "plots_best/esc64_best_time_boxplot.jpg", "Tiempos obtenidos por ambas metaheuristicas Instancia: esc64", 'Tiempo')
-graph_boxplot(bests, "plots_best/esc64_best_obj_value_boxplot.jpg", "Valores objetivos obtenidos por ambas metaheuristicas Instancia: esc64", 'Valor objetivo')
+graph_scatterplot(times, "plots_best/esc64a_best_time_boxplot.jpg", "Tiempos obtenidos por ambas metaheuristicas Instancia: esc64a", 'Tiempo')
+graph_boxplot(bests, "plots_best/esc64a_best_obj_value_boxplot.jpg", "Valores objetivos obtenidos por ambas metaheuristicas Instancia: esc64a", 'Valor objetivo')
 
 a = times.groupby('Parámetro').describe()
-#print(a)
+print("*************ESC64A*******************")
+print(a)
 b = bests.groupby('Parámetro').describe()
-#print(b)
+print(b)
 
-filename_bests_chr12a = ["result_best/kra32_best_sa","result_best/kra32_best_ga"]
+filename_bests_chr12a = ["result_best/kra32_best_sa","result_new/result/kra32_best_ga"]
 times, bests = unify_data(algorithm, filename_bests_chr12a, 30, 1)
 graph_scatterplot(times, "plots_best/kra32_best_time_boxplot.jpg", "Tiempos obtenidos por ambas metaheuristicas Instancia: kra32", 'Tiempo')
 graph_boxplot(bests, "plots_best/kra32_best_obj_value_boxplot.jpg", "Valores objetivos obtenidos por ambas metaheuristicas Instancia: kra32", 'Valor objetivo')
 
+print("*************KRA32*******************")
 a = times.groupby('Parámetro').describe()
 print(a)
 b = bests.groupby('Parámetro').describe()
