@@ -36,7 +36,7 @@ def get_times_and_best_2(json_filename, category, iterations):
         times['Tiempo'].append(json_instance["elapsed_time"])
         times['Parámetro'].append(category)
         times['Prueba'].append(i)
-        bests_objectives['Valor objetivo'].append(int(json_instance["best_objective"]))
+        bests_objectives['Valor objetivo'].append(json_instance["best_objective"])
         bests_objectives['Parámetro'].append(category)
         bests_objectives['Prueba'].append(i)
 
@@ -236,6 +236,30 @@ times, bests = unify_data(algorithm, filename_bests_chr12a, 30, 1)
 graph_scatterplot(times, "plots_best/chr12a_best_time_boxplot.jpg", "Tiempos obtenidos por ambas metaheuristicas Instancia: chr12a", 'Tiempo')
 graph_boxplot(bests, "plots_best/chr12a_best_obj_value_boxplot.jpg", "Valores objetivos obtenidos por ambas metaheuristicas Instancia: chr12a", 'Valor objetivo')
 
+a = times.groupby('Parámetro').describe()
+#print(a)
+b = bests.groupby('Parámetro').describe()
+#print(b)
+
+filename_bests_chr12a = ["result_best/esc64a_best_sa","result_best/esc64a_best_ga"]
+times, bests = unify_data(algorithm, filename_bests_chr12a, 30, 1)
+graph_scatterplot(times, "plots_best/esc64_best_time_boxplot.jpg", "Tiempos obtenidos por ambas metaheuristicas Instancia: esc64", 'Tiempo')
+graph_boxplot(bests, "plots_best/esc64_best_obj_value_boxplot.jpg", "Valores objetivos obtenidos por ambas metaheuristicas Instancia: esc64", 'Valor objetivo')
+
+a = times.groupby('Parámetro').describe()
+#print(a)
+b = bests.groupby('Parámetro').describe()
+#print(b)
+
+filename_bests_chr12a = ["result_best/kra32_best_sa","result_best/kra32_best_ga"]
+times, bests = unify_data(algorithm, filename_bests_chr12a, 30, 1)
+graph_scatterplot(times, "plots_best/kra32_best_time_boxplot.jpg", "Tiempos obtenidos por ambas metaheuristicas Instancia: kra32", 'Tiempo')
+graph_boxplot(bests, "plots_best/kra32_best_obj_value_boxplot.jpg", "Valores objetivos obtenidos por ambas metaheuristicas Instancia: kra32", 'Valor objetivo')
+
+a = times.groupby('Parámetro').describe()
+print(a)
+b = bests.groupby('Parámetro').describe()
+print(b)
 """"""""""""""""""""""" GA RESULTS """""""""""""""""""""""""""
 
 """"""""""""""""""" GENERATIONS """""""""""""""""""
