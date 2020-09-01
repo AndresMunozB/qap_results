@@ -30,7 +30,7 @@ def save_ga_graph(average_objectives_list, best_objective_list, best_objective, 
     plt.subplot(2, 1, 1)
     graficoMejores = plt.plot(best_objective_list)
     plt.setp(graficoMejores,"linestyle","none","marker","s","color","b","markersize","1")
-    plt.title(u"Simulated annealing QAP") 
+    plt.title(u"Evolutive Algorithm QAP") 
     plt.ylabel(u"Mejor valor")
     plt.subplot(2, 1, 2)
     grafico = plt.plot(average_objectives_list)
