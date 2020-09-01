@@ -61,12 +61,13 @@ def save_plots(file_names, iterations):
         for j in range(1,iterations+1):
             num_iteration = str(j).zfill(3)
     
-            sa_data = load_json(f'result_best/{file_name}_sa_{num_iteration}')
-            ga_data = load_json(f'result_best/{file_name}_ga_{num_iteration}')
-            save_sa_graph(sa_data['objective_list'],sa_data['best_objective_list'],sa_data['probabilities_list'],sa_data['temperature_list'],sa_data['best_objective'],sa_data['elapsed_time'],f'plot_best_iterations/{file_name}_sa_{num_iteration}.png')
-            save_ga_graph(ga_data['average_objectives_list'],ga_data['best_objective_list'],ga_data['best_objective'],ga_data['elapsed_time'],f'plot_best_iterations/{file_name}_ga_{num_iteration}.png')
+            #sa_data = load_json(f'result_new/result/{file_name}_sa_{num_iteration}')
+            ga_data = load_json(f'result_new/result/{file_name}_ga_{num_iteration}')
+            #save_sa_graph(sa_data['objective_list'],sa_data['best_objective_list'],sa_data['probabilities_list'],sa_data['temperature_list'],sa_data['best_objective'],sa_data['elapsed_time'],f'plot_best_iterations/{file_name}_sa_{num_iteration}.png')
+            save_ga_graph(ga_data['average_objectives_list'],ga_data['best_objective_list'],ga_data['best_objective'],ga_data['elapsed_time'],f'plot_best_iterations_new/{file_name}_ga_{num_iteration}.png')
             print(i,j)
 
-file_names = ['chr12a_best', 'esc64a_best', 'kra32_best']
+#file_names = ['chr12a_best', 'esc64a_best', 'kra32_best']
+file_names = [ 'esc64a_best', 'kra32_best']
 
 save_plots(file_names, 30)
