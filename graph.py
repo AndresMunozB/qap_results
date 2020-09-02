@@ -232,7 +232,7 @@ graph_boxplot(iteration_bests, "plots_sa/kra32_iteration_obj_value_boxplot.jpg",
 """"""""""""""""""""" BESTS COMPARATIONS """""""""""""""""""""
 
 ###### INSTANCIA 1 #######
-algorithm = ["SA", "GA"]
+algorithm = ["SA", "EA"]
 filename_bests_chr12a = ["result_best/chr12a_best_sa","result_best/chr12a_best_ga"]
 times, bests = unify_data(algorithm, filename_bests_chr12a, 30, 1)
 graph_scatterplot(times, "plots_best/chr12a_best_time_boxplot.jpg", "Tiempos obtenidos por ambas metaheuristicas Instancia: chr12a", 'Tiempo')
